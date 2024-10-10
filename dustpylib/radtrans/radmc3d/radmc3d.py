@@ -628,7 +628,7 @@ class Model():
 
     def _write_dustkapscatmat_inp(
             self,
-            datadir=None, opacity=None, smoothing=False):
+            datadir=None, opacity=None, porosity=None, smoothing=False):
         """
         Function writes the 'dustkapscatmat_*.inp' input files.
 
@@ -661,7 +661,12 @@ class Model():
         # Selecting the opacity model
         if opacity == "birnstiel2018":
             print("Using DSHARP mix. Please cite Birnstiel et al. (2018).")
-            mix, rho_s = do.get_dsharp_mix()
+            if porosity == None:
+                mix, rho_s = do.get_dsharp_mix()
+            else:
+                if porosity >= 1:
+                    raise ValueError('Pososity should be within 0 and 1. O is for compact particles')
+                mix, rho_s = do.get_dsharp_mix(porosity = porosity)
         elif opacity == "ricci2010":
             print("Using Ricci mix. Please cite Ricci et al. (2010).")
             mix, rho_s = do.get_ricci_mix(lmax=self.lam_grid[-1],
