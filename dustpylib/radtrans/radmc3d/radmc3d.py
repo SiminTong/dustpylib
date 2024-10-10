@@ -103,6 +103,9 @@ class Model():
         #: Opacity model. "birnstiel2018" (default) or "ricci2010"
         self.opacity = "birnstiel2018"
 
+        #: positiy for the opacity model. default = 0.
+        self.pososity = 0.
+
         #: ``RADMC-3D`` options for radmc3d.inp file
         self.radmc3d_options = {
             "modified_random_walk": 1,
@@ -282,6 +285,7 @@ class Model():
             self,
             datadir=None,
             write_opacities=True,
+            porosity = None,
             opacity=None,
             smoothing=False):
         """
@@ -303,6 +307,7 @@ class Model():
         """
         datadir = self.datadir if datadir is None else datadir
         opacity = opacity or self.opacity or "birnstiel2018"
+        porosity = self.porosity if porosity is None else porosity
         self._write_radmc3d_inp(datadir=datadir)
         self._write_stars_inp(datadir=datadir)
         self._write_wavelength_micron_inp(datadir=datadir)
@@ -313,12 +318,13 @@ class Model():
             self.write_opacity_files(
                 datadir=datadir,
                 opacity=opacity,
+                porosity = porosity, 
                 smoothing=smoothing
             )
         self._write_metadata(datadir=datadir)
 
     def write_opacity_files(
-            self, datadir=None, opacity=None, smoothing=False):
+            self, datadir=None, opacity=None, porosity =None, smoothing=False):
         """
         Function writes the required opacity files.
 
@@ -336,10 +342,12 @@ class Model():
         """
         datadir = self.datadir if datadir is None else datadir
         opacity = self.opacity if opacity is None else opacity
+        porosity = self.porosity if porosity is None else porosity
         self._write_dustopac_inp(datadir=datadir)
         self._write_dustkapscatmat_inp(
             datadir=datadir,
             opacity=opacity,
+            porosity = porosity,
             smoothing=smoothing
         )
 
