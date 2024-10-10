@@ -104,7 +104,7 @@ class Model():
         self.opacity = "birnstiel2018"
 
         #: positiy for the opacity model. default = 0.
-        self.pososity = 0.
+        self.porosity = 0.
 
         #: ``RADMC-3D`` options for radmc3d.inp file
         self.radmc3d_options = {
@@ -662,6 +662,8 @@ class Model():
 
         datadir = self.datadir if datadir is None else datadir
         opacity = opacity or self.opacity or "birnstiel2018"
+        porosity = self.porosity if porosity is None else porosity
+
         Path(datadir).mkdir(parents=True, exist_ok=True)
 
         Nangle = 181
