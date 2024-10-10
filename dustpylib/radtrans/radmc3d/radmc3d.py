@@ -16,6 +16,7 @@ from pathlib import Path
 from scipy.interpolate import griddata
 from scipy.interpolate import interp1d
 from types import SimpleNamespace
+from dustpy.utils import __version__ as ver_cur
 
 
 class Model():
@@ -258,10 +259,16 @@ class Model():
             DustPy simulation frame
         """
 
-        self.M_star_ = sim.star.M
-        self.R_star_ = sim.star.R
-        self.T_star_ = sim.star.T
-
+        if ver_cur != '1.0.6':
+            self.M_star_ = sim.star.M[0]
+            self.R_star_ = sim.star.R[0]
+            self.T_star_ = sim.star.T[0]
+        else:
+        # if new version of dustpy
+            self.M_star_ = sim.star.M
+            self.R_star_ = sim.star.R
+            self.T_star_ = sim.star.T
+            
         self.rc_grid_ = sim.grid.r
         self.ri_grid_ = sim.grid.ri
 
